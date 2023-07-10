@@ -1,0 +1,94 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="row">
+<div class="twelve columns" >
+	<pre>
+███████ ███████ ███████ ██       █████  ███    ██ ██████  ███████
+██      ██      ██      ██      ██   ██ ████   ██ ██   ██ ██
+█████   █████   █████   ██      ███████ ██ ██  ██ ██████  ███████
+██      ██      ██      ██      ██   ██ ██  ██ ██ ██   ██      ██
+███████ ██      ██      ███████ ██   ██ ██   ████ ██   ██ ███████
+    </pre>
+</div>
+    <div class="row">
+    <table id="snaffler" class="u-full-width">
+      <thead>
+        <tr>
+            <th>Rating</th>
+            <th>Full Path</th>
+            <th>Creation Time</th>
+            <th>Last Edited</th>
+        </tr>
+      </thead>
+      <tbody>
+      {% for finding in findings %}
+          <tr>
+              <td>{{ finding.rating }}</td>
+              <td>{{ finding.full_name }}</td>
+              <td>{{ finding.creation_time }}</td>
+              <td>{{ finding.last_write_time }}</td>
+          </tr>
+      {% endfor %}
+      </tbody>
+    </table>
+    </div>
+
+</div>
+</p>
+
+<script>
+        var filtersConfig = {
+            base_path: 'static/tablefilter/',
+            filters_row_index: 1,
+            alternate_rows: true,
+            rows_counter: true,
+            col_types: [
+                'string',
+                'string',
+                'string',
+                'string'
+            ],
+            btn_reset: {
+                text: 'Clear'
+            },
+            loader: true,
+            auto_filter: {
+                delay: 5 //milliseconds
+            },
+            col_0: 'select',
+            extensions: [{ name: 'sort' }]
+        };
+        var tf = new TableFilter('snaffler', filtersConfig);
+        tf.emitter.on(['initialized'], parseRows);
+        tf.emitter.on(['cell-processed'], formatCell);
+        tf.init();
+
+        function parseRows(tf) {
+            var cellIndex = 0;
+            var rowsIdx = tf.getValidRows();
+            rowsIdx.forEach(function(idx){
+                var row = tf.dom().rows[idx];
+                var cell = row.cells[cellIndex];
+                formatCell(tf, cellIndex, cell);
+            });
+        }
+
+        function formatCell(tf, cellIndex, cell){
+            if(cellIndex == 0){
+                if(cell.innerHTML == "Black") {
+                    cell.style.color = '#FFFFFF';
+                    cell.style.backgroundColor = '#000000';
+                } else if(cell.innerHTML == "Red") {
+                    cell.style.backgroundColor = '#FA4043';
+                } else if(cell.innerHTML == "Yellow") {
+                    cell.style.backgroundColor = '#FFDE03';
+                } else if(cell.innerHTML == "Green") {
+                    cell.style.backgroundColor = '#90ee02';
+                }  else {
+                    cell.style.backgroundColor = '#FFDE03';
+                }
+            }
+        }
+</script>
+    </div>
+{% endblock %}
