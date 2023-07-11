@@ -36,15 +36,15 @@ pip install -r requirements.txt
 Usage is simple, provide a Snaffler Standard output log or JSON.
 
 ```
-python3 snaffmap.py snaffler.output
+python3 efflanrs.py snaffler.output
 ```
 
 ```
-python3 snaffmap.py snaffler.json
+python3 efflanrs.py snaffler.json
 ```
 
 ```
-python3 snaffmap.py "./example data/snaffler.json"
+python3 efflanrs.py "./example data/snaffler.json"
 .,:::::: .-:::::'.-:::::' :::      :::.    ::.    :::.  :::::::.. .::::::.:
 ;;;;'''' ;;;'''' ;;;''''  ;;;      ;;`;;   ;;;;,  `;;; ;;;;``;;;;;;;`    ``
  [[cccc  [[[,,== [[[,,==  [[[     ,[[ '[[,  [[[[[. '[[  [[[,/[[[''[==/[[[[,
