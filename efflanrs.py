@@ -53,7 +53,7 @@ def populateSharesfromJSON(inJSONFile):
 def populateSharesfromTXT(inTxtFile):
     findings = []
     fileLineTest = re.compile(r"(\[File\])")
-    for line in open(inTxtFile, "r"):
+    for line in open(inTxtFile, "r", encoding='cp1252'):
         if fileLineTest.search(line):
             rating = re.search(r"(?<=\{)(.*?)(?=\})", line).group(1)
             full_name = re.search(r"(?<=>\()(.*?)(?=\))", line).group(1)
