@@ -80,7 +80,7 @@ def print_banner():
     print("M''''YUM   'MM,    'MM,  ''''YUMM YMM   ''` MMM     YMMMMMMM   'W'  'YMmMY'")
 
 
-def main():
+def main(render_html=True):
     print_banner()
     if len(sys.argv) > 1:
         global filename
@@ -118,8 +118,9 @@ def main():
                     sys.exit()
 
         print("###############################################")
-        webbrowser.open('http://127.0.0.1:5000', new=2)
-        app.run()
+        if render_html:
+            webbrowser.open('http://127.0.0.1:5000', new=2)
+            app.run()
     else:
         print("Please provide a .json or .txt file as a command line argument.")
 
