@@ -6,6 +6,7 @@ from flask import (Flask, render_template)
 import re
 import webbrowser
 
+
 ##CLASSES
 class Finding:
     def __init__(self, rating, full_name, creation_time, last_write_time):
@@ -17,17 +18,19 @@ class Finding:
     def __str__(self) -> str:
         return self.fullPath
 
+
 app = Flask(__name__)
 
 ### Globals
 global filename
 global findings
 
+
 @app.route("/")
 def index():
     return render_template("index.html", findings=findings)
-                
-##iterate the JSON once(this is computationally expensive to do twice but it will stop the error of a finding not having an identified share)
+
+
 def parseSnafflerJSON(inJsonFile):
     findings = []
     for jsonObject in inJsonFile['entries']:
@@ -36,12 +39,17 @@ def parseSnafflerJSON(inJsonFile):
                 for fileProperties in jsonObject['eventProperties'][eventProperty].keys():
                     for moreProperties in jsonObject['eventProperties'][eventProperty][fileProperties]:
                         if moreProperties == "MatchedRule":
-                            rating = jsonObject['eventProperties'][eventProperty][fileProperties]['MatchedRule']['Triage']
-                            creation_time = jsonObject['eventProperties'][eventProperty]['FileResult']['FileInfo']['CreationTime']
-                            last_write_time = jsonObject['eventProperties'][eventProperty]['FileResult']['FileInfo']['LastWriteTime']
-                            full_name = jsonObject['eventProperties'][eventProperty]['FileResult']['FileInfo']['FullName']
+                            rating = jsonObject['eventProperties'][eventProperty][fileProperties]['MatchedRule'][
+                                'Triage']
+                            creation_time = jsonObject['eventProperties'][eventProperty]['FileResult']['FileInfo'][
+                                'CreationTime']
+                            last_write_time = jsonObject['eventProperties'][eventProperty]['FileResult']['FileInfo'][
+                                'LastWriteTime']
+                            full_name = jsonObject['eventProperties'][eventProperty]['FileResult']['FileInfo'][
+                                'FullName']
                             findings.append(Finding(rating, full_name, creation_time, last_write_time))
     return findings
+
 
 def populateSharesfromJSON(inJSONFile):
     json_string = ""
@@ -49,6 +57,7 @@ def populateSharesfromJSON(inJSONFile):
         json_string += line
     jsonFileObject = json.loads(json_string)
     return parseSnafflerJSON(jsonFileObject)
+
 
 def populateSharesfromTXT(inTxtFile):
     findings = []
@@ -61,7 +70,8 @@ def populateSharesfromTXT(inTxtFile):
             findings.append(Finding(rating, full_name, creation_time, None))
     return findings
 
-if __name__ == '__main__':
+
+def print_banner():
     print(".,:::::: .-:::::'.-:::::' :::      :::.    ::.    :::.  :::::::.. .::::::.:")
     print(";;;;'''' ;;;'''' ;;;''''  ;;;      ;;`;;   ;;;;,  `;;; ;;;;``;;;;;;;`    ``")
     print(" [[cccc  [[[,,== [[[,,==  [[[     ,[[ '[[,  [[[[[. '[[  [[[,/[[[''[==/[[[[,")
@@ -69,6 +79,9 @@ if __name__ == '__main__':
     print("888oo,__  888     888   o88oo,.__888   888,888    Y88  888b '88bo,88b    dP")
     print("M''''YUM   'MM,    'MM,  ''''YUMM YMM   ''` MMM     YMMMMMMM   'W'  'YMmMY'")
 
+
+def main():
+    print_banner()
     if len(sys.argv) > 1:
         global filename
         filename = sys.argv[1]
@@ -107,6 +120,9 @@ if __name__ == '__main__':
         print("###############################################")
         webbrowser.open('http://127.0.0.1:5000', new=2)
         app.run()
-
     else:
         print("Please provide a .json or .txt file as a command line argument.")
+
+
+if __name__ == '__main__':
+    main()
