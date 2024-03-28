@@ -64,9 +64,18 @@ def populateSharesfromTXT(inTxtFile):
     fileLineTest = re.compile(r"(\[File\])")
     for line in open(inTxtFile, "r", encoding='cp1252'):
         if fileLineTest.search(line):
-            rating = re.search(r"(?<=\{)(.*?)(?=\})", line).group(1)
-            full_name = re.search(r"(?<=>\()(.*?)(?=\))", line).group(1)
-            creation_time = re.search(r"^.*\|(\d{4}\-(0?[1-9]|1[012])\-(0?[1-9]|[12][0-9]|3[01]) .*?Z)", line).group(1)
+            try:
+                rating = re.search(r"(?<=\{)(.*?)(?=\})", line).group(1)
+            except:
+                rating = None
+            try:
+                full_name = re.search(r"(?<=>\()(.*?)(?=\))", line).group(1)
+            except:
+                full_name = None
+            try:
+                creation_time = re.search(r"^.*\|(\d{4}\-(0?[1-9]|1[012])\-(0?[1-9]|[12][0-9]|3[01]) .*?Z)", line).group(1)
+            except:
+                creation_time = None
             findings.append(Finding(rating, full_name, creation_time, None))
     return findings
 
